@@ -3,232 +3,130 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Will You Be My Girlfriend?</title>
+  <title>Be My Girlfriend?</title>
   <style>
     body {
-      background: linear-gradient(135deg, #ffd1dc, #ffe6f2);
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #ffe6f2;
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
       height: 100vh;
+      text-align: center;
       overflow: hidden;
-      margin: 0;
-      transition: background 1s ease;
+    }
+
+    #topGif {
+      width: 250px;
+      margin-bottom: 20px;
     }
 
     h1 {
       font-size: 2.5rem;
-      text-align: center;
-      margin: 20px;
-      color: #333;
-      text-shadow: 1px 1px 2px #ffb6c1;
+      margin-bottom: 30px;
     }
 
-    p {
-      font-size: 1.1rem;
-      text-align: center;
-      margin: 10px 20px;
+    .buttons {
+      display: flex;
+      gap: 60px; /* MORE SPACE BETWEEN BUTTONS */
+      margin-top: 20px;
     }
 
     button {
-      background-color: #ff7eb9;
-      color: white;
-      border: none;
       padding: 15px 30px;
-      border-radius: 30px;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
+      border-radius: 10px;
+      border: none;
       cursor: pointer;
-      margin: 10px;
-      transition: transform 0.25s ease, background-color 0.25s ease;
-      box-shadow: 0px 5px 10px rgba(0,0,0,0.1);
+      transition: 0.3s ease;
     }
 
-    button:hover {
-      transform: scale(1.1);
-      background-color: #ff4d94;
+    #yesBtn {
+      background: #ff4da6;
+      color: white;
     }
 
-    #gif {
-      max-width: 250px;
-      margin: 20px 0;
-      border-radius: 15px;
-      opacity: 0;
-      transition: opacity 0.6s ease;
+    #noBtn {
+      background: #cccccc;
+      color: black;
     }
 
-    #question {
+    #yippeeSection {
       display: none;
       flex-direction: column;
       align-items: center;
-      animation: fadeIn 0.6s ease forwards;
+      animation: fadeIn 0.7s ease forwards;
     }
 
-    #buttons {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .fade-out {
-      animation: fadeOut 0.5s forwards;
-    }
-
-    .fade-in {
-      animation: fadeIn 0.6s forwards;
-    }
-
-    @keyframes fadeOut {
-      from { opacity: 1; transform: translateY(0); }
-      to { opacity: 0; transform: translateY(-30px); }
+    #yippeeGif {
+      width: 300px;
+      margin-top: 20px;
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    footer {
-      position: absolute;
-      bottom: 10px;
-      font-size: 0.8rem;
-      color: #888;
-      text-align: center;
+      from { opacity: 0; transform: scale(0.9);}
+      to { opacity: 1; transform: scale(1);}
     }
   </style>
 </head>
 <body>
-  <h1>Hey there 😏</h1>
-  <p>Before I ask you something important... let’s take a quick quiz!</p>
-  <button id="start-btn">Start the Quiz</button>
 
-  <div id="question">
-    <h1 id="quiz-text"></h1>
-    <img id="gif" src="" alt="Funny gif" />
-    <div id="buttons"></div>
+  <!-- QUESTION AREA -->
+  <div id="questionSection">
+    <img id="topGif" src="https://media.tenor.com/z2wjTDHkJpQAAAAC/anime-love.gif" alt="Cute GIF">
+    <h1>Will you be my girlfriend?</h1>
+
+    <div class="buttons">
+      <button id="yesBtn" onclick="yes()">Yes</button>
+      <button id="noBtn" onclick="no()">No</button>
+    </div>
   </div>
 
-  <footer>Made with ❤️ and questionable humor by [Your Name]</footer>
+  <!-- YIPPEE AREA -->
+  <div id="yippeeSection">
+    <h1 style="font-size: 4rem; color:#ff1493;">YIPPEE!!! 🎉</h1>
+    <img id="yippeeGif" src="https://media.tenor.com/e4ZCw43NyE8AAAAC/yippee-horse.gif" alt="Yippee GIF">
+  </div>
 
   <script>
-    const questions = [
-      {
-        text: "Do you like spending time with me? 😌",
-        gif: "https://media.tenor.com/0BUp3rHh6lAAAAAi/cute-puppy-love.gif",
-        answers: ["Yes", "Of course!"]
-      },
-      {
-        text: "Do you like surprises? 🎁",
-        gif: "https://media.tenor.com/Zb8kDbWZx6EAAAAM/surprise-pikachu.gif",
-        answers: ["Yep!", "Duh"]
-      },
-      {
-        text: "Okay last question... 😳",
-        gif: "https://media.tenor.com/m70HKaKuc8UAAAAM/puppy-eyes-cute.gif",
-        answers: ["I’m ready!", "Hit me!"]
-      },
-      {
-        text: "Will you be my girlfriend? 💖",
-        gif: "https://media.tenor.com/1nP1tMUnRqsAAAAM/love-cats.gif",
-        answers: ["Yes 💕", "Also yes 😆"]
-      }
+    let yesSize = 1.0;
+    let noSize = 1.0;
+
+    const noTexts = [
+      "Are you sure?",
+      "Really sure?",
+      "Think again!",
+      "You might regret this",
+      "Give it another thought",
+      "Misclick?",
+      "Have a heart"
     ];
 
-    let current = 0;
-    const startBtn = document.getElementById("start-btn");
-    const questionDiv = document.getElementById("question");
-    const quizText = document.getElementById("quiz-text");
-    const gif = document.getElementById("gif");
-    const buttonsDiv = document.getElementById("buttons");
+    let textIndex = 0;
 
-    startBtn.addEventListener("click", startQuiz);
+    function no() {
+      // Update button sizes
+      yesSize += 0.25;
+      noSize -= 0.1;
 
-    function startQuiz() {
-      startBtn.style.display = "none";
-      questionDiv.style.display = "flex";
-      showQuestion();
+      if (noSize < 0.6) noSize = 0.6; // REASONABLE MIN SIZE
+
+      document.getElementById("yesBtn").style.transform = `scale(${yesSize})`;
+      document.getElementById("noBtn").style.transform = `scale(${noSize})`;
+
+      // Cycle through texts
+      document.getElementById("noBtn").textContent = noTexts[textIndex];
+      textIndex = (textIndex + 1) % noTexts.length;
     }
 
-    function showQuestion() {
-      const q = questions[current];
-
-      quizText.classList.remove("fade-in");
-      gif.classList.remove("fade-in");
-
-      // Delay to let old fade out finish
-      setTimeout(() => {
-        quizText.textContent = q.text;
-        gif.src = q.gif;
-        gif.style.opacity = "1";
-        gif.classList.add("fade-in");
-
-        buttonsDiv.innerHTML = "";
-        q.answers.forEach((ans) => {
-          const btn = document.createElement("button");
-          btn.textContent = ans;
-          btn.onclick = handleAnswer;
-          buttonsDiv.appendChild(btn);
-        });
-
-        quizText.classList.add("fade-in");
-      }, 200);
-    }
-
-    function handleAnswer() {
-      // Add fade-out animation
-      quizText.classList.add("fade-out");
-      gif.classList.add("fade-out");
-      buttonsDiv.classList.add("fade-out");
-
-      setTimeout(() => {
-        quizText.classList.remove("fade-out");
-        gif.classList.remove("fade-out");
-        buttonsDiv.classList.remove("fade-out");
-        nextQuestion();
-      }, 400);
-    }
-
-    function nextQuestion() {
-      current++;
-      if (current < questions.length) {
-        showQuestion();
-      } else {
-        showFinalScreen();
-      }
-    }
-
-    function showFinalScreen() {
-      quizText.textContent = "Yay!!! 💘 I knew you'd say yes!";
-      gif.src = "https://media.tenor.com/TjWjE5q3S9EAAAAM/happy-cat.gif";
-      gif.style.opacity = "1";
-      buttonsDiv.innerHTML = "";
-
-      // Add confetti animation
-      launchConfetti();
-    }
-
-    // Simple confetti effect
-    function launchConfetti() {
-      for (let i = 0; i < 30; i++) {
-        const conf = document.createElement("div");
-        conf.textContent = "💖";
-        conf.style.position = "fixed";
-        conf.style.left = Math.random() * 100 + "vw";
-        conf.style.top = "-10px";
-        conf.style.fontSize = Math.random() * 20 + 20 + "px";
-        conf.style.opacity = 0.8;
-        conf.style.transition = "transform 2s linear, top 2s ease";
-        document.body.appendChild(conf);
-
-        setTimeout(() => {
-          conf.style.top = "100vh";
-          conf.style.transform = `rotate(${Math.random() * 720}deg)`;
-        }, 50);
-
-        setTimeout(() => conf.remove(), 2000);
-      }
+    function yes() {
+      document.getElementById("questionSection").style.display = "none";
+      document.getElementById("yippeeSection").style.display = "flex";
     }
   </script>
+
 </body>
 </html>
