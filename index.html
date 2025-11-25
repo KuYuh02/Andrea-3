@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Be My Girlfriend?</title>
+
+  <!-- Cute fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fredoka+One&display=swap" rel="stylesheet">
+
   <style>
     body {
       margin: 0;
@@ -13,25 +17,88 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      font-family: Arial, sans-serif;
+      font-family: "Poppins", sans-serif;
       height: 100vh;
       text-align: center;
       overflow: hidden;
+      position: relative;
+    }
+
+    /* Floating hearts */
+    .heart {
+      position: absolute;
+      font-size: 2rem;
+      animation: float 4s ease-in infinite;
+      opacity: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Confetti */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #ff1493;
+      animation: confettiFall 3s ease-out forwards;
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    /* Raised section */
+    #questionSection {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transform: translateY(-40px);
     }
 
     #topGif {
       width: 250px;
       margin-bottom: 20px;
+      animation: bounce 1s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
     }
 
     h1 {
       font-size: 2.5rem;
       margin-bottom: 30px;
+      font-family: "Poppins", sans-serif;
+      font-weight: 600;
     }
 
     .buttons {
+      width: 100%;
+      max-width: 500px;
       display: flex;
-      gap: 60px; /* MORE SPACE BETWEEN BUTTONS */
+      justify-content: space-between;
+      padding: 0 20px;
       margin-top: 20px;
     }
 
@@ -45,13 +112,16 @@
     }
 
     #yesBtn {
-      background: #ff4da6;
-      color: white;
+      background: #00ff00;
+      color: rgb(0, 0, 0);
+      font-family: "Fredoka One", cursive;
+      letter-spacing: 1px;
     }
 
     #noBtn {
-      background: #cccccc;
+      background: #ff0000;
       color: black;
+      font-family: Arial, sans-serif;
     }
 
     #yippeeSection {
@@ -67,28 +137,29 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9);}
-      to { opacity: 1; transform: scale(1);}
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
+
 <body>
 
   <!-- QUESTION AREA -->
   <div id="questionSection">
-    <img id="topGif" src="https://media.tenor.com/z2wjTDHkJpQAAAAC/anime-love.gif" alt="Cute GIF">
+    <img id="topGif" src="./cat.webp" alt="Cute GIF">
     <h1>Will you be my girlfriend?</h1>
 
     <div class="buttons">
-      <button id="yesBtn" onclick="yes()">Yes</button>
-      <button id="noBtn" onclick="no()">No</button>
+      <button id="yesBtn" onclick="yes()">Yes :)</button>
+      <button id="noBtn" onclick="no()">No :,)</button>
     </div>
   </div>
 
   <!-- YIPPEE AREA -->
   <div id="yippeeSection">
     <h1 style="font-size: 4rem; color:#ff1493;">YIPPEE!!! 🎉</h1>
-    <img id="yippeeGif" src="https://media.tenor.com/e4ZCw43NyE8AAAAC/yippee-horse.gif" alt="Yippee GIF">
+    <img id="yippeeGif" src="./cat-tongue-shake-cat-meme.gif" alt="Yippee GIF">
   </div>
 
   <script>
@@ -96,33 +167,83 @@
     let noSize = 1.0;
 
     const noTexts = [
+      "Misclick right? haha",
       "Are you sure?",
       "Really sure?",
       "Think again!",
-      "You might regret this",
-      "Give it another thought",
-      "Misclick?",
-      "Have a heart"
+      "You might regret this!",
+      "Give it another thought!",
+      "Have a heart!",
+      "I'm gonna cry :,)",
+      "Baby pease?",
+      "You're breaking my heart :,)"
     ];
 
     let textIndex = 0;
 
+    // Create floating hearts
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.textContent = '💖';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.animationDelay = Math.random() * 2 + 's';
+      heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+      document.body.appendChild(heart);
+      
+      setTimeout(() => heart.remove(), 5000);
+    }
+
+    // Generate hearts continuously
+    setInterval(createHeart, 350);
+
+    // Create confetti explosion
+    function createConfetti() {
+      const colors = ['#ff1493', '#00ff00', '#ffff00', '#00ffff', '#ff69b4', '#ffd700'];
+      
+      for (let i = 0; i < 100; i++) {
+        setTimeout(() => {
+          const confetti = document.createElement('div');
+          confetti.className = 'confetti';
+          confetti.style.left = (Math.random() * 100) + '%';
+          confetti.style.top = '100%';
+          confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.width = Math.random() * 15 + 5 + 'px';
+          confetti.style.height = confetti.style.width;
+          
+          const xVel = (Math.random() - 0.5) * 100;
+          const yVel = -(Math.random() * 300 + 200);
+          
+          document.body.appendChild(confetti);
+          
+          confetti.animate([
+            { transform: 'translate(0, 0) rotate(0deg)', opacity: 1 },
+            { transform: `translate(${xVel}px, ${yVel}px) rotate(720deg)`, opacity: 0 }
+          ], {
+            duration: 2000,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          });
+          
+          setTimeout(() => confetti.remove(), 2000);
+        }, i * 10);
+      }
+    }
+
     function no() {
-      // Update button sizes
       yesSize += 0.25;
       noSize -= 0.1;
 
-      if (noSize < 0.6) noSize = 0.6; // REASONABLE MIN SIZE
+      if (noSize < 0.6) noSize = 0.6;
 
       document.getElementById("yesBtn").style.transform = `scale(${yesSize})`;
       document.getElementById("noBtn").style.transform = `scale(${noSize})`;
 
-      // Cycle through texts
       document.getElementById("noBtn").textContent = noTexts[textIndex];
       textIndex = (textIndex + 1) % noTexts.length;
     }
 
     function yes() {
+      createConfetti();
       document.getElementById("questionSection").style.display = "none";
       document.getElementById("yippeeSection").style.display = "flex";
     }
